@@ -4,25 +4,24 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react'
-import { Button, Empty } from 'antd'
+import { Empty } from 'antd'
 import { ConfigContext } from 'antd/lib/config-provider'
 import Trigger from 'rc-trigger'
 import BUILT_IN_PLACEMENTS from '../libs/placement'
 import Menu from './Menu'
-import Checkbox from './Checkbox'
-import { TreeNode, ValueType } from '../index.d'
+import { TreeNode } from '../index.d'
 import MultiCascaderContainer from '../container'
 import Selector from './Selector'
 import { matchAllLeafValue, reconcile } from '../libs/utils'
 import { prefix } from '../constants'
 
 export interface Props {
-  value?: ValueType[]
+  value?: string[][]
   data?: TreeNode[]
   allowClear?: boolean
   columnWidth?: number
   placeholder?: string
-  onChange?: (newVal: ValueType[], selectedItems?: TreeNode[]) => void
+  onChange?: (newVal: string[][], selectedItems?: TreeNode[][]) => void
   onCascaderChange?: (
     node: TreeNode,
     operations: { add: (children: TreeNode[]) => TreeNode[] }
@@ -36,7 +35,7 @@ export interface Props {
   selectAllText?: string
   popupTransitionName?: string
   selectLeafOnly?: boolean
-  renderTitle?: (value: string) => ReactNode | undefined
+  renderTitle?: (value: TreeNode[]) => ReactNode | undefined
   getPopupContainer?: (props: any) => HTMLElement
   maxTagCount?: number | 'responsive'
 }
@@ -51,36 +50,13 @@ const Popup = (props: PopupProps) => {
   const ref = useRef(null)
   const {
     data,
-    selectAll,
-    onCancel,
-    onConfirm,
-    okText = 'Confirm',
-    cancelText = 'Cancel',
-    selectAllText = 'All',
   } = props
-  const { flattenData } = MultiCascaderContainer.useContainer()
 
   return (
     <div className={`${prefix}-popup`} ref={ref}>
       {data && data.length ? (
         <>
           <Menu />
-          <div className={`${prefix}-popup-footer`}>
-            {selectAll ? (
-              <div className={`${prefix}-popup-all`}>
-                <Checkbox node={flattenData[0]} />
-                &nbsp;&nbsp;{selectAllText}
-              </div>
-            ) : null}
-            <div className={`${prefix}-popup-buttons`}>
-              <Button size="small" onClick={onCancel}>
-                {cancelText}
-              </Button>
-              <Button size="small" type="primary" onClick={onConfirm}>
-                {okText}
-              </Button>
-            </div>
-          </div>
         </>
       ) : (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -110,17 +86,14 @@ const Component = React.memo(
     } = MultiCascaderContainer.useContainer()
 
     const handleCancel = useCallback(() => {
+      console.log(2)
       setPopupVisible(false)
     }, [])
 
     const handleItemRemove = useCallback(
-      (item: TreeNode | string) => {
-        let nextValue: string[]
-        if (typeof item === 'string') {
-          nextValue = value.filter((v) => v !== item)
-        } else {
-          nextValue = reconcile(item, false, value)
-        }
+      (item: TreeNode[]) => {
+        let nextValue: (TreeNode)[]
+        nextValue = reconcile(item[item.length - 1], false, value)
 
         triggerChange(nextValue)
       },
@@ -141,7 +114,7 @@ const Component = React.memo(
       () => {
         return {
           // 匹配所有叶子节点的 value
-          matchAllLeafValue: (v: ValueType[]) =>
+          matchAllLeafValue: (v: TreeNode[]) =>
             matchAllLeafValue(v, flattenData),
         }
       },

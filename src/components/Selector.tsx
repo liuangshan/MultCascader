@@ -1,22 +1,20 @@
 import React, { Ref, useCallback } from 'react'
 import { CloseOutlined, CloseCircleFilled } from '@ant-design/icons'
 import classnames from 'classnames'
-import { keyBy } from 'lodash'
 import Overflow from 'rc-overflow'
 import { TreeNode } from '../index.d'
 import { Props } from './MultiCascader'
 import MultiCascaderContainer from '../container'
 import { prefix } from '../constants'
-
 export interface SelectorProps extends Props {
-  onRemove: (value: TreeNode) => void
+  onRemove: (value: TreeNode[]) => void
   onClear: () => void
   forwardRef?: Ref<HTMLDivElement>
 }
 
 const Tag = (props: {
   onRemove?: SelectorProps['onRemove']
-  item: TreeNode
+  item: TreeNode[]
   renderTitle: Props['renderTitle']
   closable?: boolean
 }) => {
@@ -35,8 +33,8 @@ const Tag = (props: {
     }
   }
 
-  const value = (item.value || item) as string
-  const title = renderTitle(value) || item.title || item
+  const value = item
+  const title = renderTitle(value)
 
   return (
     <span className="ant-select-selection-item">
@@ -74,8 +72,7 @@ const Selector = (props: SelectorProps) => {
     maxTagCount,
     ...rest
   } = props
-  const { selectedItems, hackValue } = MultiCascaderContainer.useContainer()
-  const selectedItemsMap = keyBy(selectedItems, 'value')
+  const { selectedLeafNode } = MultiCascaderContainer.useContainer()
 
   const handleClear = useCallback(
     (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -88,34 +85,34 @@ const Selector = (props: SelectorProps) => {
   )
 
   const renderItem = useCallback(
-    (item: string) => {
+    (item: any) => {
       return (
         <Tag
           key={item}
           onRemove={onRemove}
-          item={selectedItemsMap[item] || item}
+          item={item}
           renderTitle={renderTitle}
         />
       )
     },
-    [selectedItemsMap, renderTitle, onRemove]
+    [renderTitle, onRemove]
   )
 
   const renderRest = useCallback(
-    (omittedValues: string[]) => (
+    (omittedValues: TreeNode[][]) => (
       <Tag
         closable={false}
         renderTitle={() => <span>+{omittedValues.length}...</span>}
-        item={{
-          title: '',
-          value: '',
-        }}
+        item={[
+          {
+            title: '',
+            value: '',
+          }
+        ]}
       />
     ),
     []
   )
-
-  const values = valueProps || hackValue.current || []
 
   return (
     <div
@@ -134,10 +131,10 @@ const Selector = (props: SelectorProps) => {
         className="ant-select-selector"
         style={{ paddingRight: !disabled && allowClear ? '24px' : undefined }}
       >
-        {values.length ? (
+        {selectedLeafNode.length ? (
           <Overflow
             prefixCls={`${prefix}-overflow`}
-            data={values}
+            data={selectedLeafNode}
             renderItem={renderItem}
             renderRest={renderRest}
             maxCount={maxTagCount}

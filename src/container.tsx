@@ -1,110 +1,72 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
-import { TreeNode, ValueType } from './index.d'
+import { TreeNode } from './index.d'
 import {
   transformValue as originalTransformValue,
-  flattenTree,
   reconcile,
-  sortByTree,
-  shallowEqualArray,
-  findNodeByValue,
+  findAllLeafNode,
+  transTreeNodesToArray,
+  transPropsValueToValues,
 } from './libs/utils'
-import { All } from './constants'
 import { Props } from './components/MultiCascader'
+import useFlattenData from './hooks/useFlattenData'
 
 const useCascade = (params?: Props) => {
   const {
+    // 全部级联数据
     data,
+    // 用户选中的数据
     value: valueProp,
-    selectAll,
     onChange,
     onCascaderChange,
     selectLeafOnly,
   } = params || {}
+
+  // 是否显示下垃圾
   const [popupVisible, setPopupVisible] = useState(false)
-  const dataRef = useRef<Array<TreeNode> | undefined>(data)
+  // 被拍平后的全部数据
+  const {flattenData} = useFlattenData(data)
 
-  useEffect(() => {
-    dataRef.current = data
-  }, [data])
+  // menu里全部的数据，按列分
+  const [menuData, setMenuData] = useState([flattenData.filter((item) => !item.parent)])
 
-  const [flattenData, setFlattenData] = useState(() => {
-    if (selectAll) {
-      return flattenTree([
-        {
-          title: 'All',
-          value: All,
-          parent: null,
-          children: data,
-        },
-      ])
-    }
-    return flattenTree(data || [])
-  })
+  // 点击显示两的路径
+  const [menuPath, setMenuPath] = useState<TreeNode[]>([]);
 
-  useEffect(() => {
-    setFlattenData(() => {
-      if (selectAll) {
-        return flattenTree([
-          {
-            title: 'All',
-            value: All,
-            parent: null,
-            children: data,
-          },
-        ])
-      }
-      return flattenTree(data || [])
-    })
-  }, [data, selectAll])
-
+  // 把从props传入的value 转换成节点类型，并兼容其父子节点
   const transformValue = useCallback(
-    (value: ValueType[]) => {
+    (propsValue: string[][]) => {
+      const value = transPropsValueToValues(propsValue, data || []);
       const nextValue = originalTransformValue(value, flattenData)
 
-      if (onChange && !shallowEqualArray(nextValue, value)) {
-        requestAnimationFrame(() => triggerChange(nextValue))
-      }
+      // if (onChange && !shallowEqualArray(nextValue, value)) {
+      //   requestAnimationFrame(() => triggerChange(nextValue))
+      // }
 
       return nextValue
     },
     [flattenData]
   )
+  // 选中的全部数据(合并后)
+  const [value, setValue] = useState<TreeNode[]>([])
 
-  const [menuData, setMenuData] = useState(() => {
-    if (selectAll && flattenData.length === 1) {
-      return []
-    }
 
-    return [
-      selectAll
-        ? flattenData[0].children!
-        : flattenData.filter((item) => !item.parent),
-    ]
-  })
+  // 选中的全部数据(合并前，原始数据)
+  const selectedLeafNode = useMemo(() => findAllLeafNode(value), [value])
 
-  const [menuPath, setMenuPath] = useState<TreeNode[]>([])
-  const [value, setValue] = useState(transformValue(valueProp || []))
-  const hackValue = useRef(value)
-
-  const selectedItems = useMemo(() => {
-    return flattenData.filter((node: TreeNode) => {
-      return (valueProp || hackValue.current).includes(node.value)
-    })
-  }, [flattenData, valueProp, popupVisible, hackValue.current])
-
+  // selector 的改变触发的函数
   const triggerChange = useCallback(
-    (nextValue: ValueType[]) => {
-      if (onChange) {
-        onChange(nextValue, selectedItems.slice(0))
-      }
-      hackValue.current = nextValue
+    (nextValue: TreeNode[]) => {
+      const selectedLeafNode = findAllLeafNode(nextValue);
+      onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode)
       setValue(nextValue)
+      console.log(1)
       setPopupVisible(false)
     },
-    [selectedItems]
+    []
   )
 
+  // 用户点击 menuItem 的时候的回调函数，动态显示columns
   const addMenu = useCallback((menu: TreeNode[], index: number) => {
     if (menu && menu.length) {
       setMenuData((prevMenuData) => [...prevMenuData.slice(0, index), menu])
@@ -113,16 +75,16 @@ const useCascade = (params?: Props) => {
     }
   }, [])
 
-  const addChildrenToNode = useCallback(
-    (target: TreeNode, children: TreeNode[]): TreeNode[] => {
-      const found = findNodeByValue(target.value, dataRef.current!)
-      if (found) {
-        found.children = children
-      }
-      return [...dataRef.current!]
-    },
-    []
-  )
+  // const addChildrenToNode = useCallback(
+  //   (target: TreeNode, children: TreeNode[]): TreeNode[] => {
+  //     const found = findNodeByValue(target.value, dataRef.current!)
+  //     if (found) {
+  //       found.children = children
+  //     }
+  //     return [...dataRef.current!]
+  //   },
+  //   []
+  // )
 
   const lastItemRef = useRef<TreeNode | null>(null)
 
@@ -130,55 +92,58 @@ const useCascade = (params?: Props) => {
     (item: TreeNode, depth: number) => {
       const { children } = item
       lastItemRef.current = item
-      onCascaderChange?.(item, {
-        add: (newChildren: TreeNode[]) => {
-          const newData = addChildrenToNode(item, newChildren)
-          if (lastItemRef.current === item) {
-            item.children = newChildren
-            newChildren.forEach((child) => {
-              child.parent = item
-            })
-            setFlattenData((prev) => [...prev, ...newChildren])
-            handleCascaderChange(item, depth)
-          }
-          return newData
-        },
-      })
+      // onCascaderChange?.(item, {
+      //   add: (newChildren: TreeNode[]) => {
+      //     const newData = addChildrenToNode(item, newChildren)
+      //     if (lastItemRef.current === item) {
+      //       item.children = newChildren
+      //       newChildren.forEach((child) => {
+      //         child.parent = item
+      //       })
+      //       setFlattenData((prev) => [...prev, ...newChildren])
+      //       handleCascaderChange(item, depth)
+      //     }
+      //     return newData
+      //   },
+      // })
       addMenu(children!, depth + 1)
+      // 设置 亮的路径
       setMenuPath((prevMenuPath) => prevMenuPath.slice(0, depth).concat(item))
     },
     [menuPath, onCascaderChange]
   )
 
   const handleSelectChange = useCallback(
-    (item: TreeNode, checked: boolean) => {
-      setValue((prevValue) =>
-        sortByTree(reconcile(item, checked, prevValue), flattenData)
-      )
+    (item: TreeNode, checked: boolean, value: TreeNode[]) => {
+      const newValue = reconcile(item, checked, value);
+      const selectedLeafNode = findAllLeafNode(newValue);
+      setValue([...newValue])
+      onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode);
     },
     [flattenData]
   )
 
   const resetMenuState = useCallback(() => {
-    if (selectAll && flattenData.length === 1) {
+    if (flattenData.length === 1) {
       return setMenuData([])
     } else {
-      setMenuData([
-        selectAll
-          ? flattenData[0].children!
-          : flattenData.filter((item) => !item.parent),
-      ])
+      setMenuData([flattenData.filter((item) => !item.parent)])
     }
     setMenuPath([])
-  }, [flattenData, selectAll])
+  }, [flattenData])
 
   // 传入的 value 有变更时重新计算
   useEffect(() => {
     if (popupVisible) {
-      setValue(transformValue(valueProp || hackValue.current))
+      setValue(transformValue(valueProp || []))
       resetMenuState()
     }
   }, [popupVisible])
+
+  useEffect(() => {
+    console.log('init')
+    setValue(transformValue(valueProp || []))
+  }, [])
 
   return {
     menuPath,
@@ -193,10 +158,9 @@ const useCascade = (params?: Props) => {
     handleSelectChange,
     flattenData,
     resetMenuState,
-    selectedItems,
     triggerChange,
     selectLeafOnly,
-    hackValue,
+    selectedLeafNode
   }
 }
 
