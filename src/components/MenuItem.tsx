@@ -13,7 +13,7 @@ export interface MenuItemProps {
 
 export default React.memo((props: MenuItemProps) => {
   const { node, depth } = props
-  const { children, value, title, isLeaf } = node
+  const { children, value, label, isLeaf } = node
   const {
     handleCascaderChange,
     menuPath,
@@ -43,7 +43,7 @@ export default React.memo((props: MenuItemProps) => {
         className={`${prefix}-column-item-label`}
         style={{ paddingLeft: checkboxHidden ? '0px' : '' }}
       >
-        <span>{title}</span>
+        <span>{label}</span>
       </p>
       {!hasChildren ? null : loading && !children?.length ? (
         <LoadingOutlined className={`${prefix}-column-item-icon`} />

@@ -7,6 +7,6 @@ export type TreeNode = {
   children?: TreeNode[]
   name?: string
   value: string
-  title: React.ReactNode
+  label: React.ReactNode
   isLeaf?: boolean
 }

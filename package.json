@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "rc-overflow": "^1.2.0-alpha.10",
+    "react-virtualized": "^9.22.5",
     "unstated-next": "^1.1.0"
   }
 }

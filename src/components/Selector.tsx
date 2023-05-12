@@ -105,7 +105,7 @@ const Selector = (props: SelectorProps) => {
         renderTitle={() => <span>+{omittedValues.length}...</span>}
         item={[
           {
-            title: '',
+            label: '',
             value: '',
           }
         ]}
