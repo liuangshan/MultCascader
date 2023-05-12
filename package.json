@@ -1,10 +1,10 @@
 {
-  "name": "antd-multi-cascader",
+  "name": "antd-multi-asl-cascader",
   "version": "2.0.1",
   "description": "A multiple cascader component for antd",
   "main": "dist/index.js",
-  "repository": "https://github.com/HelKyle/antd-multi-cascader",
-  "author": "helkylefighting@gmail.com",
+  "repository": "https://github.com/liuangshan/MultCascader.git",
+  "author": "741811875@qq.com",
   "license": "MIT",
   "private": false,
   "keywords": [
@@ -24,7 +24,7 @@
     "tsc": "tsc",
     "lessc": "lessc src/index.less dist/index.css --js",
     "test": "jest",
-    "prepublishOnly": "yarn test && rm -rf dist/ && npm run compile",
+    "prepublishOnly": "rm -rf dist/ && npm run compile",
     "deploy-storybook": "storybook-to-ghpages"
   },
   "peerDependencies": {

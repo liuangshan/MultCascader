@@ -39,8 +39,8 @@ const Column = (props: {
   function rowRenderer ({
     key,         
     index,      
-    isScrolling, 
-    isVisible,   
+    // isScrolling, 
+    // isVisible,   
     style      
   }) {
     return (

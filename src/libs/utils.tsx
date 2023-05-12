@@ -150,7 +150,7 @@ export function matchAllLeafValue(
 }
 
 /**
- * 删除所有子孙节点的 value, 不包括自己,输入可能是 dirty
+ * 获取 root 下全部的子元素(不包含root本身)，再对value进行一层过滤，过滤掉root下的子元素
  * @param root 当前选中节点 的最顶层节点
  * @param value 已经选中的值
  * @returns 更改后的value
@@ -226,8 +226,9 @@ function getCheckedParent(
  * @returns 
  */
 export function sinkTreeState(root: TreeNode, value: TreeNode[]): TreeNode[] {
-  // root 路径下的父节点
+  // value 这条路径下的全部节点(包含自己)
   const parentValues: TreeNode[] = []
+  // checkedParent下的全部叶子节点(不包含自己)
   const subTreeValues: TreeNode[] = []
 
   // 找到 受 被更改的节点 影响的父级节点
