@@ -5,6 +5,7 @@ import { TreeNode } from '../index.d'
 import MultiCascader from '../container'
 import { prefix } from '../constants'
 import Checkbox from './Checkbox'
+import Tooltip from 'antd/es/tooltip'
 
 export interface MenuItemProps {
   node: TreeNode
@@ -43,7 +44,9 @@ export default React.memo((props: MenuItemProps) => {
         className={`${prefix}-column-item-label`}
         style={{ paddingLeft: checkboxHidden ? '0px' : '' }}
       >
-        <span>{label}</span>
+        <Tooltip placement='top' title={label}>
+          <span>{label}</span>
+        </Tooltip>
       </p>
       {!hasChildren ? null : loading && !children?.length ? (
         <LoadingOutlined className={`${prefix}-column-item-icon`} />

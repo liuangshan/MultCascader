@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Checkbox } from 'antd'
 import { storiesOf } from '@storybook/react'
 import MultiCascader from '../index'
-import { UnorderedListOutlined } from '@ant-design/icons'
 
 storiesOf('MultiCascader', MultiCascader as any).add('Default', () => {
   const [state, setState] = useState<string[][]>([['Node1', 'Node1-1', 'Node1-1-1'], ['Node1', 'Node1-1', 'Node1-1-2']])
@@ -11,49 +10,29 @@ storiesOf('MultiCascader', MultiCascader as any).add('Default', () => {
     {
       value: 'Node1',
       name: 'Node1',
-      label: (
-        <>
-          <UnorderedListOutlined /> Node1
-        </>
-      ),
+      label: 'Node1',
       children: [
         {
           value: 'Node1-1',
           name: 'Node1-1',
-          label: (
-            <>
-              <UnorderedListOutlined /> Node1-1
-            </>
-          ),
+          label: 'Node1-1',
           children: [
             {
               value: 'Node1-1-1',
               name: 'Node1-1-1',
-              label: (
-                <>
-                  <UnorderedListOutlined /> Node1-1-1
-                </>
-              ),
+              label: 'Node1-1-1',
             },
             {
               value: 'Node1-1-2',
               name: 'Node1-1-2',
-              label: (
-                <>
-                  <UnorderedListOutlined /> Node1-1-2
-                </>
-              ),
+              label: 'Node1-1-2',
             },
           ],
         },
         {
           value: 'Node1-2',
           name: 'Node1-2',
-          label: (
-            <>
-              <UnorderedListOutlined /> Node1-2
-            </>
-          ),
+          label: 'Node1-2',
         },
       ],
     },

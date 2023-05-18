@@ -5,7 +5,7 @@ import MultiCascader from '../container'
 import { prefix } from '../constants'
 import MenuItem from './MenuItem'
 import { List } from 'react-virtualized';
-import { Input } from 'antd'
+import { Empty, Input } from 'antd'
 // import './Menu.less'
 import { SearchOutlined } from '@ant-design/icons'
 
@@ -69,13 +69,13 @@ const Column = (props: {
             placeholder="请输入类型关键字"
             allowClear
           />
-          <List
+          {showOptions.length ? <List
             width={245}
             height={180}
             rowCount={showOptions.length}
             rowHeight={32}
             rowRenderer={rowRenderer}
-            />
+          /> : <Empty style={{marginLeft: '20px'}} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </div>
     </div>
   )
