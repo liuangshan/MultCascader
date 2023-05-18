@@ -1,6 +1,6 @@
 {
   "name": "antd-multi-asl-cascader",
-  "version": "2.0.1",
+  "version": "2.0.5",
   "description": "A multiple cascader component for antd",
   "main": "dist/index.js",
   "repository": "https://github.com/liuangshan/MultCascader.git",

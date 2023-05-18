@@ -50,6 +50,7 @@ const Tag = (props: {
 
 const Selector = (props: SelectorProps) => {
   const {
+    width,
     onRemove,
     placeholder,
     allowClear,
@@ -129,7 +130,7 @@ const Selector = (props: SelectorProps) => {
     >
       <div
         className="ant-select-selector"
-        style={{ paddingRight: !disabled && allowClear ? '24px' : undefined }}
+        style={{ paddingRight: !disabled && allowClear ? '24px' : undefined, width: `${width}px` }}
       >
         {selectedLeafNode.length ? (
           <Overflow

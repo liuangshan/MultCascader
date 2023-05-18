@@ -6,7 +6,7 @@ import { prefix } from '../constants'
 import MenuItem from './MenuItem'
 import { List } from 'react-virtualized';
 import { Input } from 'antd'
-import './Menu.less'
+// import './Menu.less'
 import { SearchOutlined } from '@ant-design/icons'
 
 const Column = (props: {
@@ -26,7 +26,7 @@ const Column = (props: {
       if (!searchVal?.length) {
         return true;
       }
-      return eachItem.value.includes(searchVal)
+      return (eachItem.label as string || '').includes(searchVal)
     })
   }, [searchVal, item, depth])
 

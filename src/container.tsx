@@ -28,7 +28,7 @@ const useCascade = (params?: Props) => {
   const {flattenData} = useFlattenData(data)
 
   // menu里全部的数据，按列分
-  const [menuData, setMenuData] = useState([flattenData.filter((item) => !item.parent)])
+  const [menuData, setMenuData] = useState<any[]>([]);
 
   // 点击显示两的路径
   const [menuPath, setMenuPath] = useState<TreeNode[]>([]);
@@ -58,7 +58,10 @@ const useCascade = (params?: Props) => {
   const triggerChange = useCallback(
     (nextValue: TreeNode[]) => {
       const selectedLeafNode = findAllLeafNode(nextValue);
-      onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode)
+      const hasError = onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode)
+      if (hasError) {
+        return
+      }
       setValue(nextValue)
       console.log(1)
       setPopupVisible(false)
@@ -117,8 +120,11 @@ const useCascade = (params?: Props) => {
     (item: TreeNode, checked: boolean, value: TreeNode[]) => {
       const newValue = reconcile(item, checked, value);
       const selectedLeafNode = findAllLeafNode(newValue);
+      const hasError = onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode);
+      if (hasError) {
+        return
+      }
       setValue([...newValue])
-      onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode);
     },
     [flattenData]
   )
@@ -141,9 +147,8 @@ const useCascade = (params?: Props) => {
   }, [popupVisible])
 
   useEffect(() => {
-    console.log('init')
     setValue(transformValue(valueProp || []))
-  }, [])
+  }, [valueProp])
 
   return {
     menuPath,

@@ -149,7 +149,7 @@ storiesOf('MultiCascader', MultiCascader as any).add('Default', () => {
         allowClear
         disabled={disabled}
         placeholder="Default"
-        style={{ width: '480px' }}
+        width={480}
         renderTitle={(node) => {
           if (!node?.length) {
             return '';

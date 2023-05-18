@@ -16,6 +16,7 @@ import { matchAllLeafValue, reconcile } from '../libs/utils'
 import { prefix } from '../constants'
 
 export interface Props {
+  width?: number
   value?: string[][]
   data?: TreeNode[]
   allowClear?: boolean
@@ -50,6 +51,7 @@ const Popup = (props: PopupProps) => {
   const ref = useRef(null)
   const {
     data,
+    width,
   } = props
 
   return (
@@ -59,7 +61,7 @@ const Popup = (props: PopupProps) => {
           <Menu />
         </>
       ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty style={{ width: `${width}px` }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </div>
   )
