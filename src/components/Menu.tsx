@@ -66,7 +66,7 @@ const Column = (props: {
             prefix={<SearchOutlined />}
             value={searchVal}
             onChange={e => setSearchVal(e?.target?.value ?? '')}
-            placeholder="请选择状态进入时间"
+            placeholder="请输入关键字查找"
             allowClear
           />
           {showOptions.length ? <List

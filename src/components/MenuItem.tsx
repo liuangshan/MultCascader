@@ -29,6 +29,18 @@ export default React.memo((props: MenuItemProps) => {
     handleCascaderChange(node, depth)
   }, [node, depth])
 
+  const showLabel = useMemo(() => {
+    if (!label) {
+      return '';
+    }
+    const length = (label as string).length;
+    if (length <= 12) {
+      return label
+    }
+
+    return (label as string).slice(0, 13) + '...'
+  }, [label])
+
   const active = useMemo(
     () => !!menuPath.find((item) => item.value === value),
     [menuPath, value]
@@ -45,7 +57,7 @@ export default React.memo((props: MenuItemProps) => {
         style={{ paddingLeft: checkboxHidden ? '0px' : '' }}
       >
         <Tooltip placement='top' title={label}>
-          <span>{label}</span>
+          <span>{showLabel}</span>
         </Tooltip>
       </p>
       {!hasChildren ? null : loading && !children?.length ? (

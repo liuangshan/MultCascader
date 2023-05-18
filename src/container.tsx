@@ -45,7 +45,7 @@ const useCascade = (params?: Props) => {
 
       return nextValue
     },
-    [flattenData]
+    [flattenData, data]
   )
   // 选中的全部数据(合并后)
   const [value, setValue] = useState<TreeNode[]>([])
@@ -148,7 +148,7 @@ const useCascade = (params?: Props) => {
 
   useEffect(() => {
     setValue(transformValue(valueProp || []))
-  }, [valueProp])
+  }, [valueProp, transformValue])
 
   return {
     menuPath,
