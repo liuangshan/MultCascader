@@ -15,6 +15,8 @@ import Selector from './Selector'
 import { matchAllLeafValue, reconcile } from '../libs/utils'
 import { prefix } from '../constants'
 
+import '../antd.css'
+
 export interface Props {
   width?: number
   value?: string[][]

@@ -34,11 +34,11 @@ export default React.memo((props: MenuItemProps) => {
       return '';
     }
     const length = (label as string).length;
-    if (length <= 12) {
+    if (length <= 10) {
       return label
     }
 
-    return (label as string).slice(0, 13) + '...'
+    return (label as string).slice(0, 10) + '...'
   }, [label])
 
   const active = useMemo(
@@ -56,7 +56,7 @@ export default React.memo((props: MenuItemProps) => {
         className={`${prefix}-column-item-label`}
         style={{ paddingLeft: checkboxHidden ? '0px' : '' }}
       >
-        <Tooltip placement='top' title={label}>
+        <Tooltip arrow={false} title={label}>
           <span>{showLabel}</span>
         </Tooltip>
       </p>

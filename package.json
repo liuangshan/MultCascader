@@ -1,6 +1,6 @@
 {
-  "name": "antd-multi-asl-cascader-new",
-  "version": "2.0.3",
+  "name": "antd-multi-asl-cascader-pro",
+  "version": "2.0.2",
   "description": "A multiple cascader component for antd",
   "main": "dist/index.js",
   "repository": "https://github.com/liuangshan/MultCascader.git",
@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "@ant-design/icons": "*",
-    "antd": "^4.13",
+    "antd": "^5.5.1",
     "classnames": "*",
     "rc-trigger": "*",
     "react": "*"
@@ -45,7 +45,7 @@
     "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.19",
     "@types/react": "^17.0.0",
-    "antd": "^4.13.0",
+    "antd": "^5.5.1",
     "babel-loader": "^8.2.2",
     "jest": "^26.4.4",
     "less": "^3.2.22",

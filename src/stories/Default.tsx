@@ -8,9 +8,9 @@ storiesOf('MultiCascader', MultiCascader as any).add('Default', () => {
   const [disabled, setDisabled] = useState<boolean>(false)
   const [options] = useState([
     {
-      value: 'Node1',
-      name: 'Node1',
-      label: 'Node1',
+      value: '新建新建新建新建新建新建',
+      name: '新建新建新建新建新建新建',
+      label: '新建新建新建新建新建新建',
       children: [
         {
           value: 'Node1-1',

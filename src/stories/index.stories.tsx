@@ -1,5 +1,4 @@
 import '../index.less'
-import 'antd/dist/antd.css'
 
 // Stories start from here
 import './Default'
