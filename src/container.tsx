@@ -59,7 +59,7 @@ const useCascade = (params?: Props) => {
     (nextValue: TreeNode[]) => {
       const selectedLeafNode = findAllLeafNode(nextValue);
       const hasError = onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode)
-      if (hasError) {
+      if (hasError as any) {
         return
       }
       setValue(nextValue)
@@ -121,7 +121,7 @@ const useCascade = (params?: Props) => {
       const newValue = reconcile(item, checked, value);
       const selectedLeafNode = findAllLeafNode(newValue);
       const hasError = onChange && onChange(transTreeNodesToArray(selectedLeafNode), selectedLeafNode);
-      if (hasError) {
+      if (hasError as any) {
         return
       }
       setValue([...newValue])

@@ -15,8 +15,6 @@ import Selector from './Selector'
 import { matchAllLeafValue, reconcile } from '../libs/utils'
 import { prefix } from '../constants'
 
-import '../antd.css'
-
 export interface Props {
   width?: number
   value?: string[][]
@@ -77,7 +75,7 @@ const Component = React.memo(
     const selectorRef = useRef(null)
     const {
       disabled,
-      popupTransitionName = 'ant-slide-up',
+      popupTransitionName = 'self-ant-slide-up',
       getPopupContainer,
     } = props
     const {

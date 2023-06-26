@@ -37,10 +37,10 @@ const Tag = (props: {
   const title = renderTitle(value)
 
   return (
-    <span className="ant-select-selection-item">
-      <span className="ant-select-selection-item-content">{title}</span>
+    <span className="self-ant-select-selection-item">
+      <span className="self-ant-select-selection-item-content">{title}</span>
       {closable && (
-        <span className="ant-select-selection-item-remove">
+        <span className="self-ant-select-selection-item-remove">
           <CloseOutlined onClick={handleRemove} />
         </span>
       )}
@@ -119,17 +119,17 @@ const Selector = (props: SelectorProps) => {
     <div
       className={classnames(
         prefix,
-        'ant-select ant-tree-select ant-select-multiple',
+        'self-ant-select self-ant-tree-select self-ant-select-multiple',
         className,
         {
-          'ant-select-disabled': disabled,
+          'self-ant-select-disabled': disabled,
         }
       )}
       ref={forwardRef}
       {...rest}
     >
       <div
-        className="ant-select-selector"
+        className="self-ant-select-selector"
         style={{ paddingRight: !disabled && allowClear ? '24px' : undefined, width: `${width}px` }}
       >
         {selectedLeafNode.length ? (
@@ -142,14 +142,17 @@ const Selector = (props: SelectorProps) => {
           />
         ) : (
           <span
-            className={`${prefix}-placeholder ant-select-selection-placeholder`}
+            className={`${prefix}-placeholder self-ant-select-selection-placeholder`}
           >
             {placeholder}
           </span>
         )}
       </div>
+      <span className='self-ant-select-arrow'>
+        <span role="img" aria-label="down" className="anticon anticon-down self-ant-select-suffix"><svg viewBox="64 64 896 896" focusable="false" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></span>
+      </span>
       {!disabled && allowClear ? (
-        <span className="ant-select-clear" onClick={handleClear}>
+        <span className="self-ant-select-clear" onClick={handleClear}>
           <CloseCircleFilled />
         </span>
       ) : null}
