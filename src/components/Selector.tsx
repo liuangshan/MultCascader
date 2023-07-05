@@ -130,7 +130,7 @@ const Selector = (props: SelectorProps) => {
     >
       <div
         className="self-ant-select-selector"
-        style={{ paddingRight: !disabled && allowClear ? '24px' : undefined, width: `${width}px` }}
+        style={{ paddingRight: !disabled && allowClear ? '24px' : undefined, width: `${width}px`, borderRadius: '6px' }}
       >
         {selectedLeafNode.length ? (
           <Overflow
